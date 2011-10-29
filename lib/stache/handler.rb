@@ -33,7 +33,13 @@ module Stache
         variables.each do |name|
           mustache.instance_variable_set(name, controller.instance_variable_get(name))
         end
-  
+
+        local_assigns.each do |name, value|
+          var_name = "@"+name.to_s
+          mustache.instance_variable_set(var_name, local_assigns[name])
+          variables << var_name
+        end
+
         # Declaring an +attr_reader+ for each instance variable in the
         # Stache::View subclass makes them available to your templates.
         mustache.class.class_eval do
